@@ -1,0 +1,23 @@
+[project]
+name = "tw-stock-hybrid-screener"
+version = "0.1.0"
+description = "Taiwan stock hybrid watchlist screener for fundamentals, technicals, and chip-flow signals."
+requires-python = ">=3.10"
+dependencies = [
+  "pandas>=2.0",
+  "numpy>=1.24",
+  "requests>=2.31",
+  "typer>=0.12",
+  "rich>=13.7",
+  "pydantic>=2.6",
+  "fastapi>=0.110",
+  "uvicorn[standard]>=0.29",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

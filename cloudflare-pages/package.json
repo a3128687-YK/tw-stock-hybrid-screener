@@ -1,0 +1,13 @@
+{
+  "name": "tw-stock-hybrid-screener-pages",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler pages dev public --compatibility-date=2025-05-25",
+    "deploy": "wrangler pages deploy public"
+  },
+  "devDependencies": {
+    "wrangler": "^3.57.0"
+  }
+}
+

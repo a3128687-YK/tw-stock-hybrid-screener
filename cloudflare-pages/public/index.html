@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>台股混合型選股輔助系統</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>台股混合型選股輔助系統</h1>
+        <p>Cloudflare Pages + Supabase SQL 版本</p>
+      </div>
+      <span class="badge">觀察名單</span>
+    </header>
+
+    <main>
+      <section class="panel controls">
+        <label>
+          策略模式
+          <select id="mode">
+            <option value="momentum">動能模式</option>
+            <option value="accumulation">蓄勢模式</option>
+          </select>
+        </label>
+        <label>
+          候選池
+          <select id="candidateMode">
+            <option value="mainstream">主流股池</option>
+            <option value="institution_accumulation">投信連買池</option>
+            <option value="custom">自訂觀察池</option>
+          </select>
+        </label>
+        <label>
+          股票代號
+          <input id="symbols" placeholder="3228,3661,3443,3035" />
+        </label>
+        <label>
+          筆數
+          <select id="limit">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+          </select>
+        </label>
+        <label class="check">
+          <input id="sample" type="checkbox" checked />
+          示範資料
+        </label>
+        <button id="runBtn">產生觀察名單</button>
+      </section>
+
+      <section class="notice">
+        所有結果僅作為觀察名單，不作為投資建議；不承諾收益，請搭配自行研究與風險控管。
+      </section>
+
+      <section id="status" class="status"></section>
+      <section id="results" class="results"></section>
+
+      <section class="panel broker-panel">
+        <h2>分點行為分析</h2>
+        <div class="broker-grid">
+          <label>
+            股票代號
+            <input id="brokerStock" placeholder="3228" />
+          </label>
+          <label>
+            分點名稱
+            <input id="brokerName" placeholder="凱基台北" />
+          </label>
+          <button id="brokerBtn">分析分點</button>
+        </div>
+        <pre id="brokerResult"></pre>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
+
