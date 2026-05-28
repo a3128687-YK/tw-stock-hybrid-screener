@@ -102,30 +102,29 @@ def main() -> int:
 
 
 def upsert_stock_master(finmind: FinMindClient, supabase: SupabaseClient, stock_ids: list[str]) -> None:
-    rows = []
+    rows_by_id: dict[str, dict[str, Any]] = {}
     try:
         info = finmind.data("TaiwanStockInfo")
         wanted = set(stock_ids)
         for item in info:
             stock_id = str(item.get("stock_id") or "").strip()
             if stock_id in wanted:
-                rows.append(
-                    {
-                        "stock_id": stock_id,
-                        "stock_name": item.get("stock_name") or stock_id,
-                        "market": item.get("type") or item.get("market") or None,
-                        "industry": item.get("industry_category") or None,
-                        "is_etf": stock_id.startswith("00"),
-                    }
-                )
+                rows_by_id[stock_id] = {
+                    "stock_id": stock_id,
+                    "stock_name": item.get("stock_name") or stock_id,
+                    "market": item.get("type") or item.get("market") or None,
+                    "industry": item.get("industry_category") or None,
+                    "is_etf": stock_id.startswith("00"),
+                }
     except Exception as exc:
         print(f"WARN stock master from FinMind failed: {exc}", file=sys.stderr)
 
-    existing = {row["stock_id"] for row in rows}
     for stock_id in stock_ids:
-        if stock_id not in existing:
-            rows.append({"stock_id": stock_id, "stock_name": stock_id, "is_etf": stock_id.startswith("00")})
-    supabase.upsert("stocks", rows, "stock_id")
+        rows_by_id.setdefault(
+            stock_id,
+            {"stock_id": stock_id, "stock_name": stock_id, "is_etf": stock_id.startswith("00")},
+        )
+    supabase.upsert("stocks", list(rows_by_id.values()), "stock_id")
 
 
 def ingest_stock(finmind: FinMindClient, supabase: SupabaseClient, stock_id: str, start_price: str, start_recent: str, start_fundamental: str) -> None:
@@ -315,4 +314,3 @@ def to_float(value: Any) -> float:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
