@@ -125,6 +125,15 @@ def upsert_stock_master(finmind: FinMindClient, supabase: SupabaseClient, stock_
             {"stock_id": stock_id, "stock_name": stock_id, "is_etf": stock_id.startswith("00")},
         )
     supabase.upsert("stocks", list(rows_by_id.values()), "stock_id")
+    except Exception as exc:
+        print(f"WARN stock master from FinMind failed: {exc}", file=sys.stderr)
+
+    for stock_id in stock_ids:
+        rows_by_id.setdefault(
+            stock_id,
+            {"stock_id": stock_id, "stock_name": stock_id, "is_etf": stock_id.startswith("00")},
+        )
+    supabase.upsert("stocks", list(rows_by_id.values()), "stock_id")
 
 
 def ingest_stock(finmind: FinMindClient, supabase: SupabaseClient, stock_id: str, start_price: str, start_recent: str, start_fundamental: str) -> None:
